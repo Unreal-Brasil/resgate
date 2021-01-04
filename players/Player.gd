@@ -4,13 +4,10 @@ export (int) var run_speed = 100
 export (int) var jump_speed = -400
 export (int) var gravity = 1200
 
+onready var anim_sprite = get_node("AnimatedSprite")
+
 var velocity = Vector2()
 var jumping = false
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-
-	pass # Replace with function body.
 
 
 func _physics_process(delta: float) -> void:
@@ -32,12 +29,18 @@ func get_input():
 	if(jump and is_on_floor()):
 		jumping=true
 		velocity.y = jump_speed
+		anim_sprite.play("jump")
 	
 	if(right):
 		velocity.x += run_speed
+		anim_sprite.flip_h = false
+		anim_sprite.play("run")
 
 	if(left):
 		velocity.x -= run_speed
-		
-		
-		
+		anim_sprite.flip_h = true
+		anim_sprite.play("run")
+	
+	if(!left and !right and !jump):
+		anim_sprite.play("idle")
+	
